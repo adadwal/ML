@@ -1,0 +1,95 @@
+---
+title: "Credit Default Analysis"
+author: "Anil Dadwal"
+date: "22 April 2017"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r Credit Analysis, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document for Credit Analysis project. 
+
+```{r CreditDefault echo=FALSE}
+
+install.packages("dplyr")
+
+library(dplyr)
+
+setwd("C:/AnilDev/Data Mining/Assignment/assignmentTwo/")
+
+creditDefault <- readLines("CreditCardDefault.csv")
+
+# Remove the first line that has variable names X1 to X23
+
+creditDefault <- creditDefault[-1]
+
+creditDefault = read.csv(textConnection(creditDefault), header = TRUE, stringsAsFactors = FALSE)
+
+str(creditDefault)
+
+# Change the column name PAY_0 t o PAY_1 
+
+creditDefault <- rename(creditDefault, pay_1 = PAY_0, nextMonthDefault = default.payment.next.month )
+
+str(creditDefault)
+
+# Investgating the data for trends and Patterns
+
+summary(creditDefault)
+
+which(is.na(creditDefault$SEX))
+
+which(is.na(creditDefault$MARRIAGE))
+
+which(is.na(creditDefault$AGE))
+
+ creditDefault[which(is.na(creditDefault$AGE)), ]
+ 
+ # Remove this row with NAs
+ 
+ creditDefault <- filter(creditDefault, !is.na(creditDefault$SEX))
+ 
+ # The summary shows that tehre is still another NA in the ID attribute,The two functions below show that 
+ # the ID number is missing in the ID attributes.
+ 
+ creditDefault[which(is.na(creditDefault$ID)),]
+ 
+ creditDefault[which(is.na(creditDefault$ID)) - 1,]
+ 
+ creditDefault[which(is.na(creditDefault$ID)) + 1,]
+ 
+ # Replacing ID in row 24559
+ 
+ creditDefault$ID[(which(is.na(creditDefault$ID)))] <- as.numeric(which(is.na(creditDefault$ID)))
+ 
+ # Applying various classification and decision tree models to the sanitised Dataframe
+ 
+ # write to a file to read in SPSS
+
+write.csv(creditDefault, file="CreditData.csv", sep =',')
+
+# Some common Data visulization to see if any delinquency patterns exist.
+
+# See key attributes of delinquent accounts 
+
+ delinquentAcc <- filter(creditDefault, nextMonthDefault == 1)
+ 
+ # see if delinquent cards have much more than average balance
+
+
+# see key attributes of delinquent accounts - 
+
+
+# Using K mean and Hierarchical clustering to ascertain any data
+
+
+
+
+```
+
